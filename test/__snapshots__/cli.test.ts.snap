@@ -1,0 +1,81 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`tracker-view CLI > prints the tracker table with flags over the threshold 1`] = `
+"Tracker view · 0x0000…00d1 · Hyperliquid state at 2026-10-18T22:28:34.813Z
+Account value $7.83M · 3 open positions · exposure $8.05M · 2 over your $250K threshold
+
+MARKET  SIDE        SIZE     VALUE        LEV    ENTRY     MARK  LIQ PRICE  TO LIQ     UPNL
+LIT     short  2,551,077    $7.67M     3x iso   1.3235   3.0068     5.5096   83.2%   -$4.3M  OVER THRESHOLD
+ETH     short      124.8  $298.15K  20x cross  2,667.4  2,389.3     21,587  803.5%  $34.75K  OVER THRESHOLD
+HYPE    short      1,051   $82.11K  10x cross    90.35    78.13    2,292.7   >999%  $12.84K
+
+Sorted by closest liquidation. Liquidation prices as reported by Hyperliquid; for cross margin they depend on the
+whole account, and "none" means the position alone cannot be liquidated at any price.
+"
+`;
+
+exports[`tracker-view CLI > re-plans every position into a band 1`] = `
+"Tracker view · 0x0000…00d1 · Hyperliquid state at 2026-10-18T22:28:34.813Z
+Account value $7.83M · 3 open positions · exposure $8.05M · 2 over your $250K threshold
+
+MARKET  SIDE        SIZE     VALUE        LEV    ENTRY     MARK  LIQ PRICE  TO LIQ     UPNL
+LIT     short  2,551,077    $7.67M     3x iso   1.3235   3.0068     5.5096   83.2%   -$4.3M  OVER THRESHOLD
+ETH     short      124.8  $298.15K  20x cross  2,667.4  2,389.3     21,587  803.5%  $34.75K  OVER THRESHOLD
+HYPE    short      1,051   $82.11K  10x cross    90.35    78.13    2,292.7   >999%  $12.84K
+
+Sorted by closest liquidation. Liquidation prices as reported by Hyperliquid; for cross margin they depend on the
+whole account, and "none" means the position alone cannot be liquidated at any price.
+
+Re-planned as isolated slices at today's mark, none liquidating before today's price where an isolated slice can reach it (nothing is changed):
+  LIT short $7.67M: trackers see 5.5096 on one wallet -> 12 slices, band 5.5096 to 7.3604, largest $770.21K, 12 of 12 over threshold, 0.76x blended
+  ETH short $298.15K: trackers see 21,587 on one wallet -> 2 slices, band 14,054 to 14,054, largest $164.9K, 0 of 2 over threshold, 0.20x blended (today's price needs less leverage than an isolated slice can use, so planned at 0.20x)
+  HYPE short $82.11K: trackers see 2,292.7 on one wallet -> 2 slices, band 446.44 to 446.44, largest $45.41K, 0 of 2 over threshold, 0.20x blended (today's price needs less leverage than an isolated slice can use, so planned at 0.20x)
+"
+`;
+
+exports[`tracker-view CLI > refuses to run without a threshold or an alert distance, and explains why 1`] = `
+"tracker-view: see a Hyperliquid address the way public trackers see it
+
+Usage:
+  tracker-view <address> --threshold <usd> [--replan] [--watch --alert <pct>] [--json]
+
+Options:
+  --threshold <usd>   your alert threshold: positions worth more are flagged (required; 250000, 250k, 1.5m)
+  --replan            re-plan each position into isolated slices placed beyond today's liquidation price
+  --band <0..1>       leverage stagger across slices (default 0.5)
+  --jitter <0..1>     size variation across slices (default 0.35)
+  --seed <n>          seed for the size variation (default 11)
+  --min-slices <n>    fewest slices (default 2)
+  --max-slices <n>    most slices (default 12)
+  --watch             keep polling and print a line when a position nears its liquidation price
+  --alert <pct>       with --watch: alert distance in percent of the mark, for example 3 (required with --watch)
+  --interval <sec>    with --watch: seconds between polls (default 30)
+  --json              print JSON ({ data, source, fetchedAt }); with --watch, one JSON line per poll
+  -h, --help          show this help
+
+Only public data is read. Nothing is signed, stored or sent anywhere except the public reads themselves.
+"
+`;
+
+exports[`tracker-view CLI > shows positions without a liquidation price, and an empty account 1`] = `
+"Tracker view · 0x0000…00d2 · Hyperliquid state at 2026-10-18T22:28:35.002Z
+Account value $128.3K · 5 open positions · exposure $1.08M · 2 over your $100K threshold
+
+MARKET  SIDE          SIZE     VALUE        LEV       ENTRY        MARK  LIQ PRICE  TO LIQ      UPNL
+INJ     short      8,803.6   $72.19K   5x cross      8.4057      8.2005     752.80   >999%    $1,809
+WLD     long     385,897.4  $184.67K  10x cross    0.475860    0.478550       none       –    $1,032  OVER THRESHOLD
+GRASS   long      93,177.6   $54.48K   3x cross    0.579500    0.584720       none       –      $487
+PUMP    long   186,589,053   $761.1K  10x cross  0.00422700  0.00407900       none       –  -$27.64K  OVER THRESHOLD
+MON     long       302,095    $6,359   5x cross   0.0234050   0.0210540       none       –     -$711
+
+Sorted by closest liquidation. Liquidation prices as reported by Hyperliquid; for cross margin they depend on the
+whole account, and "none" means the position alone cannot be liquidated at any price.
+
+Re-planned as isolated slices at today's mark, none liquidating before today's price where an isolated slice can reach it (nothing is changed):
+  INJ short $72.19K: trackers see 752.80 on one wallet -> 2 slices, band 44.73 to 44.73, largest $39.93K, 0 of 2 over threshold, 0.20x blended (today's price needs less leverage than an isolated slice can use, so planned at 0.20x)
+  WLD long $184.67K: no liquidation price today, planned at 1x -> 3 slices, band – to –, largest $67.15K, 0 of 3 over threshold, 0.76x blended
+  GRASS long $54.48K: no liquidation price today, planned at 1x -> 2 slices, band – to –, largest $30.13K, 0 of 2 over threshold, 0.73x blended
+  PUMP long $761.1K: no liquidation price today, planned at 1x -> 9 slices, band – to –, largest $101.98K, 1 of 9 over threshold, 0.77x blended
+  MON long $6,359: no liquidation price today, planned at 1x -> 2 slices, band – to –, largest $3,517, 0 of 2 over threshold, 0.73x blended
+"
+`;

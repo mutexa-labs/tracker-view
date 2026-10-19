@@ -1,6 +1,6 @@
 {
   "name": "@mutexa/tracker-view",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "See any Hyperliquid address the way public trackers see it: positions sorted by closest liquidation, flags above your alert threshold, a re-plan of each position into a band of slices, and a read-only watch mode.",
   "license": "MIT",
   "type": "module",

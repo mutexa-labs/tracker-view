@@ -4,6 +4,13 @@ All notable changes to this package are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow semver (`0.x`: minor bumps may
 change the API).
 
+## [0.1.2] - 2026-10-19
+
+### Fixed
+
+- Restore the `allowBuilds` entries for the git-hosted `@mutexa/ladder` and `@mutexa/liq-math`, so a fresh install
+  can build them.
+
 ## [0.1.1] - 2026-10-19
 
 ### Fixed

@@ -1,6 +1,6 @@
 {
   "name": "@mutexa/tracker-view",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "See any Hyperliquid address the way public trackers see it: positions sorted by closest liquidation, flags above your alert threshold, a re-plan of each position into a band of slices, and a read-only watch mode.",
   "license": "MIT",
   "type": "module",
@@ -54,7 +54,7 @@
   "dependencies": {
     "@mutexa/ladder": "github:mutexa-labs/liquidation-ladder#v0.1.0",
     "@mutexa/liq-math": "github:mutexa-labs/liq-math#v0.1.0",
-    "@mutexa/venue-adapters": "github:mutexa-labs/venue-adapters#v0.1.0"
+    "@mutexa/venue-adapters": "github:mutexa-labs/venue-adapters#v0.1.1"
   },
   "devDependencies": {
     "@types/node": "^22.19.0",
